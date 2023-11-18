@@ -6,13 +6,13 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:18:59 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/16 14:59:09 by jgils            ###   ########.fr       */
+/*   Updated: 2023/11/17 17:37:14 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <unistd.h>
-#include <limit.h> //NULL
+#include <limits.h> //NULL
 
 char	*makestr(int fd)
 {
