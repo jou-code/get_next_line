@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:18:44 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/21 20:15:30 by jgils            ###   ########.fr       */
+/*   Updated: 2023/11/22 12:57:23 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	get_end(static char *buf)
 	return (i);
 }
 
+/*
 char	*make_str(str, buf, size)
 {
 	int	i;
@@ -46,6 +47,23 @@ char	*make_str(str, buf, size)
 	free (str);
 	return (newstr);
 }
+*/
+
+char	*new_size(char *str, size_t size)
+{
+	int	i;
+	char    *newstr;
+
+        i = 0;
+        if (buf[0] == '\n')
+                i++;
+        newstr = (char *) malloc ((size - i) + sizeof(str));
+        if (!newstr)
+                newstr = NULL;
+        free (str);
+        return (newstr);
+}
+
 
 int	main(void)
 {
@@ -72,7 +90,9 @@ int	main(void)
 		else if ((len >= 1) && (len < BUFFER_SIZE)) //pensar se o buffersize for > que o arquivo(read)
 		{
 			str = make_str(str, buf, (len + 1)); //len ++
+			// strlcat ou join
 			temp = make_str(&buf[len + 2], "", (BUFFER_SIZE - (len + 2));
+			// strlcpy
 			break ;
 		}
 		str = make_str(str, buf, BUFFER_SIZE); //trocar buffer size por len
