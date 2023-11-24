@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:18:44 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/22 12:57:23 by jgils            ###   ########.fr       */
+/*   Updated: 2023/11/23 23:32:36 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,22 @@
 #include <fcntl.h> //open
 #include <libft.h> // buffersize
 
-int	get_end(static char *buf)
+int	get_end(static char *str)
 {
 	int		i;
-	int		len;
-	char	*ptr;
 
 	i = 0;
-	ptr = (char *) s;
-	while (ptr[i] || ptr[i] != '\n')
+	while (str[i])
 	{
+		if (str[i] == '\n')
+		{
+			i++;
+			break ;
+		}
 		i++;
 	}
 	return (i);
 }
-
 /*
 char	*make_str(str, buf, size)
 {
@@ -48,7 +49,6 @@ char	*make_str(str, buf, size)
 	return (newstr);
 }
 */
-
 char	*new_size(char *str, size_t size)
 {
 	int	i;
@@ -64,42 +64,40 @@ char	*new_size(char *str, size_t size)
         return (newstr);
 }
 
+char	*keep(str, buf, size)
+{
+
+}
+
+// ideia: dividir em: primeira rodada/ resto das rodadas
 
 int	main(void)
 {
 	char	*buf;
 	static char	*temp;
 	char	*str;
-	size_t	len;
+	size_t	end;
 	int	file;
-	int	i;
 
-	i = 0;
-	str = NULL;
 	file = open("test.txt", O_RDONLY);
 	buf = (char *) malloc (BUFFER_SIZE * sizeof(char));
 	if (!buf)
 		return (NULL);
-	if () //?
-		return ();
 	while (read(file, buf, BUFFER_SIZE) >= 0)
 	{
-		len = get_end(buf) + 1;
-		if (erros)
-			return ();
-		else if ((len >= 1) && (len < BUFFER_SIZE)) //pensar se o buffersize for > que o arquivo(read)
+		end = get_end(buf);
+		if (buf[end] == '\n')
+			end++;
+		if ((end >= 1) && (end < BUFFER_SIZE))
 		{
-			str = make_str(str, buf, (len + 1)); //len ++
-			// strlcat ou join
-			temp = make_str(&buf[len + 2], "", (BUFFER_SIZE - (len + 2));
-			// strlcpy
-			break ;
+			temp = (char *) malloc ((BUFFER_SIZE - (end + 2) * sizeof(char))); // tem q ser newsize :/
+			ft_strlcpy(temp, &buf[end + 2], (BUFFER_SIZE - (end + 2)));
 		}
-		str = make_str(str, buf, BUFFER_SIZE); //trocar buffer size por len
+		str = new_size(str, (end * sizeof(char)));
+		str = ft_strjoin(str, buf, end);
+		// if cond de parada
 	}
 	free(buf);
-	if (str[len] == '\n')
-		str[len + 1] = '\0';
 	return (str);
 	printf("%s", buf);
 }
