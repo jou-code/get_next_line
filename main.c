@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:18:44 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/23 23:32:36 by jgils            ###   ########.fr       */
+/*   Updated: 2023/11/29 04:15:35 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 #include <stdio.h> //printf
 #include <stdlib.h> //malloc
 #include <fcntl.h> //open
-#include <libft.h> // buffersize
+#include "libft.h" //buffersize ft_strlen ft_strlen
+
+#BUFFER_SIZE = 42;
 
 int	get_end(static char *str)
 {
@@ -57,7 +59,7 @@ char	*new_size(char *str, size_t size)
         i = 0;
         if (buf[0] == '\n')
                 i++;
-        newstr = (char *) malloc ((size - i) + sizeof(str));
+        newstr = (char *) malloc ((size - i) + sizeof(ft_strlen(str)));
         if (!newstr)
                 newstr = NULL;
         free (str);
@@ -90,12 +92,11 @@ int	main(void)
 			end++;
 		if ((end >= 1) && (end < BUFFER_SIZE))
 		{
-			temp = (char *) malloc ((BUFFER_SIZE - (end + 2) * sizeof(char))); // tem q ser newsize :/
+			temp = (char *) new_size((BUFFER_SIZE - (end + 2) * sizeof(char)));
 			ft_strlcpy(temp, &buf[end + 2], (BUFFER_SIZE - (end + 2)));
 		}
 		str = new_size(str, (end * sizeof(char)));
 		str = ft_strjoin(str, buf, end);
-		// if cond de parada
 	}
 	free(buf);
 	return (str);
