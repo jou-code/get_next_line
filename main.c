@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:18:44 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/29 04:15:35 by jgils            ###   ########.fr       */
+/*   Updated: 2023/12/03 23:25:10 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 #include <stdlib.h> //malloc
 #include <fcntl.h> //open
 #include "libft.h" //buffersize ft_strlen ft_strlen
-
-#BUFFER_SIZE = 42;
+#include "get_next_line.h" // buffersize
 
 int	get_end(static char *str)
 {
@@ -57,7 +56,7 @@ char	*new_size(char *str, size_t size)
 	char    *newstr;
 
         i = 0;
-        if (buf[0] == '\n')
+        if (str[0] == '\n')
                 i++;
         newstr = (char *) malloc ((size - i) + sizeof(ft_strlen(str)));
         if (!newstr)
@@ -96,7 +95,7 @@ int	main(void)
 			ft_strlcpy(temp, &buf[end + 2], (BUFFER_SIZE - (end + 2)));
 		}
 		str = new_size(str, (end * sizeof(char)));
-		str = ft_strjoin(str, buf, end);
+		str = ft_strjoin(str, buf);
 	}
 	free(buf);
 	return (str);
