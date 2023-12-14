@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:18:59 by jgils             #+#    #+#             */
-/*   Updated: 2023/12/13 11:32:00 by jgils            ###   ########.fr       */
+/*   Updated: 2023/12/14 12:23:37 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *s, int n);
-char	*ft_strnjoin(char const *s1, char const *s2, int n);
+char	*ft_strjoin(char const *s1, char const *s2);
 
 char	*add_null(char *str)
 {
@@ -44,25 +44,23 @@ char	*add_null(char *str)
 	return (dest);
 }
 
-char	*makestr_keeprest(char *str, char *buf, char *keep)
+char	*get_str(char *buf, char *keep)
 {	
-	//char	*str;
+	char	*str;
 	int	len;
 
-	//str = 0;
-	if (buf[0] == '\n')
-		return ("\n");
+	str = 0;
 	len = ft_strlen(buf);
-	if (!str)
-		str = ft_strndup(buf, len);
+	if (buf[0] == '\n')
+		str = "\n";
 	else
-		ft_strnjoin(str, buf, len);
+		str = ft_strndup(buf, len);
+	if ((buf[len + 1] != '\0') && (buf[len] == '\n'))
+		keep = ft_strndup(&buf[len + 1], ft_strlen(&buf[len + 1])); //tem q copiar \n
 	if (buf[len] == '\n')
-	{
-		keep = ft_strndup(&buf[len + 1], ft_strlen(&buf[len + 1]));
 		add_null(str);
-	}
 	return (str);
+	(void)keep;
 }
 
 
@@ -71,48 +69,25 @@ char	*get_next_line(int fd)
 	char	*buf;
 	char	*str;
 	static char	*keep;
-	int	len;
-	int	add;
 
 	str = 0;
-	keep = 0;
-	add = 0;
 	buf = (char *) malloc (BUFFER_SIZE * sizeof(char));
 	if (!buf)
 		return (NULL);
 	if (keep)
-	{
-		if (keep[0] == '\n')
-			return ("\n");
-		len = ft_strlen(keep);
-		str = ft_strndup(keep, len);
-		if (keep[len] == '\n')
-		{	
-			add++;
-			keep = ft_strndup(&buf[len + 1], ft_strlen(&buf[len + 1]));
-		}
-	}
-	while ((buf[len] != '\n') && (read(fd, buf, BUFFER_SIZE) >= 0) && !add)
-			makestr_keeprest(str, buf, keep);
-	if (buf[len] == '\n' || add)
-		add_null(str);
+		get_str(keep, keep);
+	while ((read(fd, buf, BUFFER_SIZE) > 0) && (buf[ft_strlen(buf)] != '\n'))
+		str = ft_strjoin(str, get_str(buf, keep));
+
 	free(buf);
 	return (str);
 }
-/*
-char	*get_next_line(int fd)
-{
-	static int	count;
 
-	count = 0;
-	return (str);
-}
-*/
 int	main(void)
 {
 	int	fd;
 
 	fd = open("test.txt", O_RDONLY);
-	printf("str: %s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 	return (0);
 }

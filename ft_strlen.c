@@ -6,18 +6,22 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 19:42:31 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/01 17:45:13 by jgils            ###   ########.fr       */
+/*   Updated: 2023/12/13 14:53:14 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
 
 size_t	ft_strlen(const char *s)
 {
 	int	i;
+	int	len;
 
 	i = 0;
-	while (*s++)
-		i++;
-	return (i);
+	len = 0;
+	if (!s)
+		return (0);
+	while (s[i++])
+		len++;
+	return (len);
 }
