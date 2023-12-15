@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:18:59 by jgils             #+#    #+#             */
-/*   Updated: 2023/12/14 12:23:37 by jgils            ###   ########.fr       */
+/*   Updated: 2023/12/14 22:40:41 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,23 @@
 size_t	ft_strlen(const char *s);
 char	*ft_strndup(const char *s, int n);
 char	*ft_strjoin(char const *s1, char const *s2);
+
+int	get_end(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\n')
+		{
+			i++;
+			break ;
+		}
+		i++;
+	}
+	return (i);
+}
 
 char	*add_null(char *str)
 {
@@ -50,7 +67,7 @@ char	*get_str(char *buf, char *keep)
 	int	len;
 
 	str = 0;
-	len = ft_strlen(buf);
+	len = get_end(buf);
 	if (buf[0] == '\n')
 		str = "\n";
 	else
@@ -75,8 +92,10 @@ char	*get_next_line(int fd)
 	if (!buf)
 		return (NULL);
 	if (keep)
-		get_str(keep, keep);
+		str = get_str(keep, keep);
 	while ((read(fd, buf, BUFFER_SIZE) > 0) && (buf[ft_strlen(buf)] != '\n'))
+	{
+		if 
 		str = ft_strjoin(str, get_str(buf, keep));
 
 	free(buf);
