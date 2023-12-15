@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:18:59 by jgils             #+#    #+#             */
-/*   Updated: 2023/12/14 22:40:41 by jgils            ###   ########.fr       */
+/*   Updated: 2023/12/14 23:23:34 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ int	get_end(char *str)
 	while (str[i])
 	{
 		if (str[i] == '\n')
-		{
-			i++;
 			break ;
-		}
 		i++;
 	}
 	return (i);
@@ -87,17 +84,16 @@ char	*get_next_line(int fd)
 	char	*str;
 	static char	*keep;
 
-	str = 0;
+	str = (char *) malloc (sizeof(char));
+	str[0] = '\0';
 	buf = (char *) malloc (BUFFER_SIZE * sizeof(char));
 	if (!buf)
 		return (NULL);
 	if (keep)
 		str = get_str(keep, keep);
-	while ((read(fd, buf, BUFFER_SIZE) > 0) && (buf[ft_strlen(buf)] != '\n'))
-	{
-		if 
-		str = ft_strjoin(str, get_str(buf, keep));
 
+	while ((str[get_end(str)] != '\n') && (read(fd, buf, BUFFER_SIZE) > 0))
+		str = ft_strjoin(str, get_str(buf, keep));
 	free(buf);
 	return (str);
 }
