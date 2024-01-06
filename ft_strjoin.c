@@ -6,14 +6,13 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 17:45:56 by jou               #+#    #+#             */
-/*   Updated: 2023/12/14 22:27:42 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/06 01:32:35 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
 #include <stdlib.h>
 
-static size_t  ft_strlen(const char *s)
+int  ft_strlen(char *s)
 {
         int     i;
 	int	len;
@@ -22,7 +21,7 @@ static size_t  ft_strlen(const char *s)
 	len = 0;
 	if (!s)
 		return (0);
-        while (s[i])
+        while (s && s[i])
 	{
 		len++;
                 i++;
@@ -31,7 +30,7 @@ static size_t  ft_strlen(const char *s)
 }
 
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*newstr;
 	int		i;
@@ -42,20 +41,18 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	newstr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) * sizeof(char));
 	if (!newstr)
 		return (NULL);
-	if (s1)
+	while (s1 && s1[i])
 	{
-		while (s1[i])
-		{
-			newstr[i] = s1[i];
-			i++;
-		}
+		newstr[i] = s1[i];
+		i++;
 	}
-
-	while (s2[is2] && s2[is2])
+	while (s2[is2])
 	{
 		newstr[i] = s2[is2];
 		s2++;
 		i++;
 	}
+	//free (s1);
+	//free (s2);
 	return (newstr);
 }

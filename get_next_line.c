@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/06 00:06:39 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/06 01:25:10 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@
 #include <stdlib.h> //malloc NULL
 #include <fcntl.h> //open
 
-# define BUFFER_SIZE 42
+# define BUFFER_SIZE 4
 
-size_t  ft_strlen(const char *s);
 char	*ft_strdup(const char *s);
 char    *ft_strndup(const char *s, int n);
 char    *ft_strjoin(char const *s1, char const *s2);
@@ -28,7 +27,7 @@ int     get_end(char *str)
 	int		i;
 
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
                 if (str[i] == '\n')
 		{
@@ -55,22 +54,41 @@ char	*get_str(char *buf, char **keep)
 	
 
 
-	if (len > 1 && str[len - 1] == '\n')
-		str[len - 1] = '\0';
-
 	if (buf[len] && buf[len - 1] == '\n')
 		*keep = ft_strdup(&buf[len]);
-
 	return (str);
-
 }
-
 
 char	*get_next_line(int fd)
 {
+	char	*buf;
 	char	*str;
+	static char	*keep;
 
+	buf = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buf)
+		return (NULL);
+	buf[BUFFER_SIZE] = '\0';
 
+	str = (char *) malloc (sizeof(char));
+	str[0] = 0;
+	if (!str)
+		return (NULL);
+
+	
+
+	if (keep)
+		str = get_str(keep, &keep);
+
+	while ((str[get_end(str) - 1] != '\n') && (read(fd, buf, BUFFER_SIZE) > 0))
+	{
+		if (keep)
+			str = get_str(keep, &keep);
+		else
+			str = ft_strjoin(str, get_str(buf, &keep));
+	}
+
+	free (buf);
 	return (str);
 }
 
@@ -79,6 +97,8 @@ int     main(void)
 	int     fd;
 
         fd = open("test.txt", O_RDONLY);
+        printf("%s", get_next_line(fd));
+        printf("%s", get_next_line(fd));
         printf("%s", get_next_line(fd));
         return (0);
 }
