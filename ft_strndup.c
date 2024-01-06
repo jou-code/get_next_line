@@ -20,7 +20,7 @@ char	*ft_strndup(const char *s, int n)
 	i = 0;
 	if (!s || !n)
 		return (NULL);
-	dest = (char *) malloc(n * sizeof(char));
+	dest = (char *) malloc((n + 1) * sizeof(char));
 	if (!dest)
 		return (0);
 	i = 0;
@@ -29,5 +29,6 @@ char	*ft_strndup(const char *s, int n)
 		dest[i] = s[i];
 		i++;
 	}
+	dest[i] = '\0';
 	return (dest);
 }

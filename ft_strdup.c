@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 17:20:24 by jgils             #+#    #+#             */
-/*   Updated: 2023/11/15 18:29:36 by jgils            ###   ########.fr       */
+/*   Created: 2023/12/13 06:46:10 by jgils             #+#    #+#             */
+/*   Updated: 2024/01/05 23:13:46 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include <stdlib.h>
 
-# ifndef BUFFER_SIZE
-static long	BUFFER_SIZE=42;
-# endif
+char	*ft_strdup(char *s)
+{
+	int		i;
+	char	*dest;
 
-char	*get_next_line(int fd);
-
-#endif
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[i])
+		i++;
+	dest = (char *) malloc((i + 1) * sizeof(char));
+	if (!dest)
+		return (0);
+	i = 0;
+	while (s[i])
+	{
+		dest[i] = s[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
