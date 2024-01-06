@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/06 16:18:01 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/06 16:47:13 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,13 @@ char	*get_next_line(int fd)
 	if (keep)
 	{
 		str = get_str(keep, &keep);
-		if (keep[get_end(keep) - 1] != '\n')
-			keep = 0;
+		//if (keep[get_end(keep) - 1] != '\n')
+		//	keep = 0;
 	}
 
 	while ((str[get_end(str) - 1] != '\n') && (read(fd, buf, BUFFER_SIZE) > 0))
 	{
-		if (keep)
-			str = get_str(keep, &keep);
-		else
-			str = ft_strjoin(str, get_str(buf, &keep));
+		str = ft_strjoin(str, get_str(buf, &keep));
 	}
 	
 	free (buf);

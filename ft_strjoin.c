@@ -38,7 +38,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	is2 = 0;
-	newstr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) * sizeof(char));
+	newstr = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1 * sizeof(char));
 	if (!newstr)
 		return (NULL);
 	while (s1 && s1[i])
@@ -46,12 +46,13 @@ char	*ft_strjoin(char *s1, char *s2)
 		newstr[i] = s1[i];
 		i++;
 	}
-	while (s2[is2])
+	while (s2 && s2[is2])
 	{
 		newstr[i] = s2[is2];
 		s2++;
 		i++;
 	}
+	newstr[i + is2] = '\0';
 	//free (s1);
 	//free (s2);
 	return (newstr);
