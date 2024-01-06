@@ -6,21 +6,16 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/06 16:47:13 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/06 18:42:03 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h> //printf
 #include <unistd.h> // write?
-//#include <limits.h> //
 #include <stdlib.h> //malloc NULL
 #include <fcntl.h> //open
+#include "get_next_line.h"
 
-# define BUFFER_SIZE 4
-
-char	*ft_strdup(char *s);
-char    *ft_strndup(char *s, int n);
-char    *ft_strjoin(char *s1, char *s2);
 
 int     get_end(char *str)
 {
@@ -79,9 +74,9 @@ char	*get_next_line(int fd)
 
 	if (keep)
 	{
-		str = get_str(keep, &keep);
-		//if (keep[get_end(keep) - 1] != '\n')
-		//	keep = 0;
+		str = get_str(keep, &keep); 
+		if (keep[get_end(keep) - 1] != '\n' || (keep[0] == '\n' && get_end(str) == '\n'))
+			keep = 0;
 	}
 
 	while ((str[get_end(str) - 1] != '\n') && (read(fd, buf, BUFFER_SIZE) > 0))
@@ -97,7 +92,7 @@ int     main(void)
 {
 	int     fd;
 
-        fd = open("test.txt", O_RDONLY);
+        fd = open("1-brouette.txt", O_RDONLY);
         printf("%s", get_next_line(fd));
         printf("%s", get_next_line(fd));
         printf("%s", get_next_line(fd));
