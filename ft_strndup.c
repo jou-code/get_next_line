@@ -12,7 +12,7 @@
 
 #include <stdlib.h>
 
-char	*ft_strndup(const char *s, int n)
+char	*ft_strndup(char *s, int n)
 {
 	int		i;
 	char	*dest;
@@ -30,5 +30,6 @@ char	*ft_strndup(const char *s, int n)
 		i++;
 	}
 	dest[i] = '\0';
+	//free (s);
 	return (dest);
 }

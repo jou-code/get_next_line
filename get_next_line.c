@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/06 01:25:10 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/06 16:18:01 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 # define BUFFER_SIZE 4
 
-char	*ft_strdup(const char *s);
-char    *ft_strndup(const char *s, int n);
-char    *ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(char *s);
+char    *ft_strndup(char *s, int n);
+char    *ft_strjoin(char *s1, char *s2);
 
 int     get_end(char *str)
 {
@@ -47,15 +47,15 @@ char	*get_str(char *buf, char **keep)
 	len = get_end(buf);
 	if (!buf || !len)
 		return (NULL);
-	else if (buf[0] == '\n')
-		str = "\n";
-	else
-		str = ft_strndup(buf, len);
+
+	if (buf[len] && buf[len - 1] == '\n')
+                *keep = ft_strdup(&buf[len]);
+
+	
+	str = ft_strndup(buf, len);
 	
 
 
-	if (buf[len] && buf[len - 1] == '\n')
-		*keep = ft_strdup(&buf[len]);
 	return (str);
 }
 
@@ -78,7 +78,11 @@ char	*get_next_line(int fd)
 	
 
 	if (keep)
+	{
 		str = get_str(keep, &keep);
+		if (keep[get_end(keep) - 1] != '\n')
+			keep = 0;
+	}
 
 	while ((str[get_end(str) - 1] != '\n') && (read(fd, buf, BUFFER_SIZE) > 0))
 	{
@@ -87,7 +91,7 @@ char	*get_next_line(int fd)
 		else
 			str = ft_strjoin(str, get_str(buf, &keep));
 	}
-
+	
 	free (buf);
 	return (str);
 }

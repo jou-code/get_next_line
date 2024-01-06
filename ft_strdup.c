@@ -32,5 +32,6 @@ char	*ft_strdup(char *s)
 		i++;
 	}
 	dest[i] = '\0';
+	//free (s);
 	return (dest);
 }
