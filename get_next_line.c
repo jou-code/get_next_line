@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/06 18:42:03 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/08 20:42:16 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ char	*get_str(char *buf, char **keep)
 
 	if (buf[len] && buf[len - 1] == '\n')
                 *keep = ft_strdup(&buf[len]);
+	else
+		*keep = 0;
 
-	
+
 	str = ft_strndup(buf, len);
 	
 
@@ -58,6 +60,7 @@ char	*get_next_line(int fd)
 {
 	char	*buf;
 	char	*str;
+	int	bytes;
 	static char	*keep;
 
 	buf = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
@@ -73,33 +76,40 @@ char	*get_next_line(int fd)
 	
 
 	if (keep)
-	{
 		str = get_str(keep, &keep); 
-		if (keep[get_end(keep) - 1] != '\n' || (keep[0] == '\n' && get_end(str) == '\n'))
-			keep = 0;
-	}
 
-	while ((str[get_end(str) - 1] != '\n') && (read(fd, buf, BUFFER_SIZE) > 0))
+	bytes = 1;
+
+	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
 	{
+		bytes = read(fd, buf, BUFFER_SIZE);
+		buf[bytes] = '\0';
 		str = ft_strjoin(str, get_str(buf, &keep));
 	}
 	
 	free (buf);
+
+	if (str[0] == 0)
+		return (NULL);
 	return (str);
 }
 
+/*
 int     main(void)
 {
 	int     fd;
+	char	*gnl;
 
         fd = open("1-brouette.txt", O_RDONLY);
-        printf("%s", get_next_line(fd));
-        printf("%s", get_next_line(fd));
-        printf("%s", get_next_line(fd));
+	gnl = get_next_line(fd);
+	while (gnl)
+	{
+		printf("%s", gnl);
+		gnl = get_next_line(fd);
+	}
         return (0);
 }
 
-/*
 int	main(teste get_str)
 {
 	static char	*keep;
