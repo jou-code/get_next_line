@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/08 23:11:56 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/09 02:08:57 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,14 @@ char	*get_str(char *buf, char **keep)
 	if (buf[len] && buf[len - 1] == '\n')
 		*keep = ft_strdup(&buf[len]);
 	else
-		*keep = 0;
+		a*keep = 0;
 	str = ft_strndup(buf, len);
 	return (str);
+}
+
+char	acumulate_str()
+{
+
 }
 
 char	*get_next_line(int fd)
@@ -56,6 +61,8 @@ char	*get_next_line(int fd)
 	char		*buf;
 	char		*str;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	buf = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
 		return (NULL);
@@ -69,6 +76,11 @@ char	*get_next_line(int fd)
 	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
+		if (bytes == -1)
+		{
+			free(buf);
+			return (NULL);
+		}	
 		buf[bytes] = '\0';
 		str = ft_strjoin(str, get_str(buf, &keep));
 	}
