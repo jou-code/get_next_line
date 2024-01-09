@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:42:46 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/08 18:17:42 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/08 23:18:33 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+#  define BUFFER_SIZE 42
 # endif
 
 char	*get_next_line(int fd);
-char    *ft_strdup(char *s);
-char    *ft_strndup(char *s, int n);
-char    *ft_strjoin(char *s1, char *s2);
-int     get_end(char *str);
-char    *get_str(char *buf, char **keep);
+char	*ft_strdup(char *s);
+char	*ft_strndup(char *s, int n);
+char	*ft_strjoin(char *s1, char *s2);
+char	*get_str(char *buf, char **keep);
+int		get_end(char *str);
 
 #endif

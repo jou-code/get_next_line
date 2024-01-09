@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/08 20:42:16 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/08 23:11:56 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,84 +16,67 @@
 #include <fcntl.h> //open
 #include "get_next_line.h"
 
-
-int     get_end(char *str)
+int	get_end(char *str)
 {
 	int		i;
 
 	i = 0;
 	while (str && str[i])
 	{
-                if (str[i] == '\n')
+		if (str[i] == '\n')
 		{
 			i++;
 			break ;
 		}
-                i++;
-        }
-        return (i);
+		i++;
+	}
+	return (i);
 }
 
 char	*get_str(char *buf, char **keep)
 {
 	char	*str;
-	int	len;
+	int		len;
 
 	len = get_end(buf);
 	if (!buf || !len)
 		return (NULL);
-
 	if (buf[len] && buf[len - 1] == '\n')
-                *keep = ft_strdup(&buf[len]);
+		*keep = ft_strdup(&buf[len]);
 	else
 		*keep = 0;
-
-
 	str = ft_strndup(buf, len);
-	
-
-
 	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*buf;
-	char	*str;
-	int	bytes;
 	static char	*keep;
+	int			bytes;
+	char		*buf;
+	char		*str;
 
 	buf = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
 		return (NULL);
-	buf[BUFFER_SIZE] = '\0';
-
 	str = (char *) malloc (sizeof(char));
 	str[0] = 0;
 	if (!str)
 		return (NULL);
-
-	
-
 	if (keep)
-		str = get_str(keep, &keep); 
-
+		str = get_str(keep, &keep);
 	bytes = 1;
-
 	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
 		buf[bytes] = '\0';
 		str = ft_strjoin(str, get_str(buf, &keep));
 	}
-	
 	free (buf);
-
 	if (str[0] == 0)
 		return (NULL);
 	return (str);
 }
-
 /*
 int     main(void)
 {
