@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/10 12:08:07 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/10 13:37:06 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*get_str(char *s1) //nao pode free
 }
 
 
-char	*get_keep(char *s1) //nao pode dar free
+char	*get_keep(char *s1, int flag) //nao pode dar free
 {
 	char	*str;
 	int		len;
@@ -60,6 +60,8 @@ char	*get_keep(char *s1) //nao pode dar free
 		str = ft_strdup(&s1[len]);
 	else
 		str = 0;
+	if (flag)
+		free (s1);
 	return (str);
 }
 
@@ -83,7 +85,7 @@ char	*get_next_line(int fd)
 	if (keep)
 	{
 		str = get_str(keep);
-		keep = get_keep(keep);
+		keep = get_keep(keep, 1);
 	}
 	bytes = 1;
 	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
@@ -96,11 +98,14 @@ char	*get_next_line(int fd)
 		}
 		buf[bytes] = '\0';
 		str = ft_strjoin(str, get_str(buf));
-		keep = get_keep(buf);
+		keep = get_keep(buf, 0);
 	}
 	free (buf);
-	if (str[0] == 0)
+	if (bytes == 0)
+	{
+		free(str);
 		return (NULL);
+	}
 	return (str);
 }
 
