@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/10 10:29:56 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/10 12:08:07 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	get_end(char *str)
 	{
 		if (str[i] == '\n')
 		{
-newstr			i++;
+			i++;
 			break ;
 		}
 		i++;
@@ -35,23 +35,31 @@ newstr			i++;
 	return (i);
 }
 
-char	*get_str(char *s1, char **s2, int flag)
+char	*get_str(char *s1) //nao pode free
+{
+	char	*str;
+	int	len;
+
+	if (!s1)
+		return (NULL);
+	len = get_end(s1);
+	str = ft_strndup(s1, len);
+	return (str);
+}
+
+
+char	*get_keep(char *s1) //nao pode dar free
 {
 	char	*str;
 	int		len;
 
-	len = get_end(s1);
-	if (!*s2)
-	if (!s1 || !len)
+	if (!s1)
 		return (NULL);
+	len = get_end(s1);
 	if (s1[len] && s1[len - 1] == '\n')
-	{
-		//free (*s2);
-		*s2 = ft_strdup(&s1[len]);
-	}
+		str = ft_strdup(&s1[len]);
 	else
-		*s2 = 0;
-	str = ft_strndup(s1, len, flag);
+		str = 0;
 	return (str);
 }
 
@@ -61,7 +69,6 @@ char	*get_next_line(int fd)
 	int			bytes;
 	char		*buf;
 	char		*str;
-	char		*newstr;
 
 	buf = 0;
 	if ((fd < 0) || (BUFFER_SIZE <= 0))
@@ -74,14 +81,22 @@ char	*get_next_line(int fd)
 	if (!str)
 		return (NULL);
 	if (keep)
-		str = get_str(keep, &keep, 1);
+	{
+		str = get_str(keep);
+		keep = get_keep(keep);
+	}
 	bytes = 1;
 	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
+		if (bytes < 0)
+		{
+			free(buf);
+			return (NULL);
+		}
 		buf[bytes] = '\0';
-		newstr = get_str(buf, &keep, 0);
-		str = ft_strjoin(str, newstr);
+		str = ft_strjoin(str, get_str(buf));
+		keep = get_keep(buf);
 	}
 	free (buf);
 	if (str[0] == 0)

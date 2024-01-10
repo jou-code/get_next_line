@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:48:45 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/10 09:15:00 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/10 11:51:16 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*ft_strdup(char *s)
 	return (dest);
 }
 
-char	*ft_strndup(char *s, int n, int flag)
+char	*ft_strndup(char *s, int n)
 {
 	int		i;
 	char	*dest;
@@ -53,8 +53,6 @@ char	*ft_strndup(char *s, int n, int flag)
 		i++;
 	}
 	dest[i] = '\0';
-	if (flag)
-		free (s);
 	return (dest);
 }
 
