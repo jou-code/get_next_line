@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/09 02:08:57 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/10 10:29:56 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ int	get_end(char *str)
 	int		i;
 
 	i = 0;
-	while (str && str[i])
+	if (str[0] == '\0')
+		return (1);
+	while (str[i])
 	{
 		if (str[i] == '\n')
 		{
-			i++;
+newstr			i++;
 			break ;
 		}
 		i++;
@@ -33,25 +35,24 @@ int	get_end(char *str)
 	return (i);
 }
 
-char	*get_str(char *buf, char **keep)
+char	*get_str(char *s1, char **s2, int flag)
 {
 	char	*str;
 	int		len;
 
-	len = get_end(buf);
-	if (!buf || !len)
+	len = get_end(s1);
+	if (!*s2)
+	if (!s1 || !len)
 		return (NULL);
-	if (buf[len] && buf[len - 1] == '\n')
-		*keep = ft_strdup(&buf[len]);
+	if (s1[len] && s1[len - 1] == '\n')
+	{
+		//free (*s2);
+		*s2 = ft_strdup(&s1[len]);
+	}
 	else
-		a*keep = 0;
-	str = ft_strndup(buf, len);
+		*s2 = 0;
+	str = ft_strndup(s1, len, flag);
 	return (str);
-}
-
-char	acumulate_str()
-{
-
 }
 
 char	*get_next_line(int fd)
@@ -60,8 +61,10 @@ char	*get_next_line(int fd)
 	int			bytes;
 	char		*buf;
 	char		*str;
+	char		*newstr;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	buf = 0;
+	if ((fd < 0) || (BUFFER_SIZE <= 0))
 		return (NULL);
 	buf = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
@@ -71,25 +74,21 @@ char	*get_next_line(int fd)
 	if (!str)
 		return (NULL);
 	if (keep)
-		str = get_str(keep, &keep);
+		str = get_str(keep, &keep, 1);
 	bytes = 1;
 	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (bytes == -1)
-		{
-			free(buf);
-			return (NULL);
-		}	
 		buf[bytes] = '\0';
-		str = ft_strjoin(str, get_str(buf, &keep));
+		newstr = get_str(buf, &keep, 0);
+		str = ft_strjoin(str, newstr);
 	}
 	free (buf);
 	if (str[0] == 0)
 		return (NULL);
 	return (str);
 }
-/*
+
 int     main(void)
 {
 	int     fd;
@@ -100,11 +99,13 @@ int     main(void)
 	while (gnl)
 	{
 		printf("%s", gnl);
+		free (gnl);
 		gnl = get_next_line(fd);
 	}
+	free (gnl);
         return (0);
 }
-
+/*
 int	main(teste get_str)
 {
 	static char	*keep;
