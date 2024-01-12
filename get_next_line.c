@@ -6,14 +6,10 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/12 00:00:51 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/12 05:29:01 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h> //printf
-#include <unistd.h> // write?
-#include <stdlib.h> //malloc NULL
-#include <fcntl.h> //open
 #include "get_next_line.h"
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -23,11 +19,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	int	j_len;
 	char	*join;
 
-	j_len = 0;
-	while (s1 && s1[j_len])
-		j_len++;
-	while (s2 && s2[j_len])
-		j_len++;
+	j_len = ft_strlen(s1) + ft_strlen(s2);
 	join = (char *) malloc(j_len + 1 * sizeof(char));
 	if (!join)
 		return (NULL);
@@ -41,21 +33,47 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2 && s2[i2])
 		join[i++] = s2[i2++];
 	join[i] = '\0';
+	if (!join[0])
+	{
+		free(join);
+		return (NULL);
+	}
+	free (s1);
 	return (join);
 }
 
-int	is_line(char *next_line)
+char	*get_rest(char *next_line)
 {
-	int		i;
-
+	int	i;
+	int	i2;
+	int	len;
+	char	*rest;
+	
 	i = 0;
-	while (next_line && next_line[i])
+	while (next_line && next_line[i] && next_line[i] != '\n')
+		i++;
+	if (!next_line[i])
 	{
-		if (next_line[i] == '\n')
-			return (1);
+		free (next_line);
+		return (NULL);
+	}
+	if (next_line && next_line[i] == '\n')
+		i++;
+	rest = (char *) malloc(ft_strlen(next_line) - i + 1 * sizeof(char));
+	if (!rest)
+		return (NULL);
+	i2 = 0;
+	len = ft_strlen(next_line) - i;
+	while (next_line && i2 < len)
+	{
+		rest[i2] = next_line[i];
+		i2++;
 		i++;
 	}
-	return(0);
+	rest[i2] = '\0';
+	if (next_line)
+		free(next_line);
+	return (rest);
 }
 
 char	*get_line(char *next_line)
@@ -74,43 +92,17 @@ char	*get_line(char *next_line)
 		}
 		i++;
 	}
-	if (next_line[0] == '\n')
-		i--;
 	line = (char *) malloc(i + 1 * sizeof(char));
 	if (!line)
 		return (NULL);
-	i2 = -1;
-	while (++i2 < i)
+	i2 = 0;
+	while (next_line && i2 < i)
+	{
 		line[i2] = next_line[i2];
+		i2++;
+	}
 	line[i2] = '\0';
 	return (line);
-}
-
-char	*get_rest(char *next_line)
-{
-	int	i;
-	int	i2;
-	int	nl_len;
-	char	*rest;
-
-	i = 0;
-	while (next_line && next_line[i] != '\n')
-		i++;
-	i++;
-	if (!(i + 1))
-	{
-		free(next_line);
-		return (NULL);
-	}
-	nl_len = 0;
-	while (next_line && next_line[nl_len])
-		nl_len++;
-	rest = (char *) malloc(nl_len - i + 1 * sizeof(char));
-	i2 = 0;
-	while (i <= nl_len)
-		rest[i2++] = next_line[i++];
-	rest[i2] = '\0';
-	return (rest);
 }
 
 char	*get_next_line(int fd)
@@ -131,18 +123,23 @@ char	*get_next_line(int fd)
 		bytes = read(fd, buf, BUFFER_SIZE);
 		if (bytes < 0)
 		{
-			free(buf);
+			free (buf);
 			return (NULL);
 		}
 		buf[bytes] = '\0';
 		next_line = ft_strjoin(next_line, buf);
 	}
-	free(buf);
+	free (buf);
+	if (!next_line)
+		return (NULL);
 	line = get_line(next_line);
 	next_line = get_rest(next_line);
 	return (line);
 }
 
+
+#include <fcntl.h>
+#include <stdio.h>
 int     main(void)
 {
 	int     fd;
@@ -159,6 +156,7 @@ int     main(void)
 	free (gnl);
         return (0);
 }
+
 /*
 int	main(teste get_str)
 {

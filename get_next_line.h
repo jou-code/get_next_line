@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:42:46 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/10 13:26:08 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/12 05:08:46 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@
 #  define BUFFER_SIZE 42
 # endif
 
-char	*get_next_line(int fd);
-char	*ft_strdup(char *s);
-char	*ft_strndup(char *s, int n);
+#include <unistd.h>
+#include <stdlib.h>
+
 char	*ft_strjoin(char *s1, char *s2);
-char	*get_str(char *s1);
-char	*get_keep(char *s1, int flag);
-int		get_end(char *str);
+int	ft_strlen(char *str);
+char	*get_rest(char *next_line);
+char	*get_line(char *next_line);
+char	*get_next_line(int fd);
+int	is_line(char *next_line);
+
+
 
 #endif
