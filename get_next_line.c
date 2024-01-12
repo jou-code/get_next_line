@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/11 23:53:49 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/12 00:00:51 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,20 @@ char	*get_line(char *next_line)
 	while (next_line && next_line[i])
 	{
 		if (next_line[i] == '\n')
+		{
+			i++;
 			break ;
+		}
 		i++;
 	}
 	if (next_line[0] == '\n')
-		i++;
+		i--;
 	line = (char *) malloc(i + 1 * sizeof(char));
 	if (!line)
 		return (NULL);
-	i2 = 0;
-	while (i2 < i)
-	{
+	i2 = -1;
+	while (++i2 < i)
 		line[i2] = next_line[i2];
-		i2++;
-	}
 	line[i2] = '\0';
 	return (line);
 }
