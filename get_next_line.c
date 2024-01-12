@@ -6,7 +6,7 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/10 13:37:06 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/11 23:53:49 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,79 +16,117 @@
 #include <fcntl.h> //open
 #include "get_next_line.h"
 
-int	get_end(char *str)
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int	i;
+	int	i2;
+	int	j_len;
+	char	*join;
+
+	j_len = 0;
+	while (s1 && s1[j_len])
+		j_len++;
+	while (s2 && s2[j_len])
+		j_len++;
+	join = (char *) malloc(j_len + 1 * sizeof(char));
+	if (!join)
+		return (NULL);
+	i = 0;
+	i2 = 0;
+	while (s1 && s1[i])
+	{
+		join[i] = s1[i];
+		i++;
+	}
+	while (s2 && s2[i2])
+		join[i++] = s2[i2++];
+	join[i] = '\0';
+	return (join);
+}
+
+int	is_line(char *next_line)
 {
 	int		i;
 
 	i = 0;
-	if (str[0] == '\0')
-		return (1);
-	while (str[i])
+	while (next_line && next_line[i])
 	{
-		if (str[i] == '\n')
-		{
-			i++;
-			break ;
-		}
+		if (next_line[i] == '\n')
+			return (1);
 		i++;
 	}
-	return (i);
+	return(0);
 }
 
-char	*get_str(char *s1) //nao pode free
+char	*get_line(char *next_line)
 {
-	char	*str;
-	int	len;
+	int	i;
+	int	i2;
+	char	*line;
 
-	if (!s1)
+	i = 0;
+	while (next_line && next_line[i])
+	{
+		if (next_line[i] == '\n')
+			break ;
+		i++;
+	}
+	if (next_line[0] == '\n')
+		i++;
+	line = (char *) malloc(i + 1 * sizeof(char));
+	if (!line)
 		return (NULL);
-	len = get_end(s1);
-	str = ft_strndup(s1, len);
-	return (str);
+	i2 = 0;
+	while (i2 < i)
+	{
+		line[i2] = next_line[i2];
+		i2++;
+	}
+	line[i2] = '\0';
+	return (line);
 }
 
-
-char	*get_keep(char *s1, int flag) //nao pode dar free
+char	*get_rest(char *next_line)
 {
-	char	*str;
-	int		len;
+	int	i;
+	int	i2;
+	int	nl_len;
+	char	*rest;
 
-	if (!s1)
+	i = 0;
+	while (next_line && next_line[i] != '\n')
+		i++;
+	i++;
+	if (!(i + 1))
+	{
+		free(next_line);
 		return (NULL);
-	len = get_end(s1);
-	if (s1[len] && s1[len - 1] == '\n')
-		str = ft_strdup(&s1[len]);
-	else
-		str = 0;
-	if (flag)
-		free (s1);
-	return (str);
+	}
+	nl_len = 0;
+	while (next_line && next_line[nl_len])
+		nl_len++;
+	rest = (char *) malloc(nl_len - i + 1 * sizeof(char));
+	i2 = 0;
+	while (i <= nl_len)
+		rest[i2++] = next_line[i++];
+	rest[i2] = '\0';
+	return (rest);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*keep;
-	int			bytes;
-	char		*buf;
-	char		*str;
+	static char	*next_line;
+	char	*line;
+	char	*buf;
+	int	bytes;
 
-	buf = 0;
-	if ((fd < 0) || (BUFFER_SIZE <= 0))
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buf = (char *) malloc ((BUFFER_SIZE + 1) * sizeof(char));
+	buf = (char *) malloc(BUFFER_SIZE + 1 * sizeof(char));
 	if (!buf)
-		return (NULL);
-	str = (char *) malloc (sizeof(char));
-	str[0] = 0;
-	if (!str)
-		return (NULL);
-	if (keep)
-	{
-		str = get_str(keep);
-		keep = get_keep(keep, 1);
-	}
+		return(NULL);
 	bytes = 1;
-	while ((str[get_end(str) - 1] != '\n') && (bytes > 0))
+	while (!is_line(buf) && bytes > 0)
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
 		if (bytes < 0)
@@ -97,16 +135,12 @@ char	*get_next_line(int fd)
 			return (NULL);
 		}
 		buf[bytes] = '\0';
-		str = ft_strjoin(str, get_str(buf));
-		keep = get_keep(buf, 0);
+		next_line = ft_strjoin(next_line, buf);
 	}
-	free (buf);
-	if (bytes == 0)
-	{
-		free(str);
-		return (NULL);
-	}
-	return (str);
+	free(buf);
+	line = get_line(next_line);
+	next_line = get_rest(next_line);
+	return (line);
 }
 
 int     main(void)
