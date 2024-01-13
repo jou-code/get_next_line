@@ -1,41 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/06 17:48:45 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/12 15:26:43 by jou              ###   ########.fr       */
+/*   Created: 2024/01/06 17:42:46 by jgils             #+#    #+#             */
+/*   Updated: 2024/01/12 05:08:46 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+
+#include <unistd.h>
+#include <stdlib.h>
+
+char	*ft_strjoin(char *s1, char *s2);
+int	ft_strlen(char *str);
+char	*get_rest(char *next_line);
+char	*get_line(char *next_line);
+char	*get_next_line(int fd);
+int	is_line(char *next_line);
 
 
-int	ft_strlen(char *str)
-{
-	int	i;
 
-	i = 0;
-	while (str && str[i])
-		i++;
-	return(i);
-}
-
-int	is_line(char *next_line)
-{
-	int		i;
-
-	i = 0;
-	if (!next_line)
-		return (0);
-	while (next_line[i])
-	{
-		if (next_line[i] == '\n')
-			return (1);
-		i++;
-	}
-	return(0);
-}
-
+#endif

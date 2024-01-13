@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:42:46 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/12 05:08:46 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/12 15:47:58 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
+# endif
+
+# ifndef MAX_FD
+#  define MAX_FD 1024
 # endif
 
 #include <unistd.h>

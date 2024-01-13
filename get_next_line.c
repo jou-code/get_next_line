@@ -6,11 +6,34 @@
 /*   By: jou <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/12 05:29:01 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/12 16:38:52 by jou              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*calloc;
+	size_t	i;
+
+	if (nmemb == 0 || size == 0)
+	{
+		nmemb = 1;
+		size = 1;
+	}
+	calloc = malloc(nmemb * size);
+	if (!calloc)
+		return (NULL);
+	i = 0;
+	while (i < size)
+	{
+		((char *) calloc)[i] = 0;
+		i++;
+	}
+	return (calloc);
+}
 
 char	*ft_strjoin(char *s1, char *s2)
 {
@@ -25,10 +48,14 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (NULL);
 	i = 0;
 	i2 = 0;
-	while (s1 && s1[i])
+	if (s1)
 	{
-		join[i] = s1[i];
-		i++;
+		while (s1 && s1[i])
+		{
+			join[i] = s1[i];
+			i++;
+		}
+		free (s1);
 	}
 	while (s2 && s2[i2])
 		join[i++] = s2[i2++];
@@ -38,7 +65,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		free(join);
 		return (NULL);
 	}
-	free (s1);
 	return (join);
 }
 
@@ -105,18 +131,12 @@ char	*get_line(char *next_line)
 	return (line);
 }
 
-char	*get_next_line(int fd)
-{
-	static char	*next_line;
+char	*make_lines(int fd, char *buf)
+{	
+	static char	*next_line = 0;
 	char	*line;
-	char	*buf;
 	int	bytes;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	buf = (char *) malloc(BUFFER_SIZE + 1 * sizeof(char));
-	if (!buf)
-		return(NULL);
 	bytes = 1;
 	while (!is_line(buf) && bytes > 0)
 	{
@@ -137,7 +157,19 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
+char	*get_next_line(int fd)
+{
+	char	*buf;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buf = (char *) ft_calloc(BUFFER_SIZE + 1 , sizeof(char));
+	if (!buf)
+		return(NULL);
+	return (make_lines(fd, buf));
+}
+
+/*
 #include <fcntl.h>
 #include <stdio.h>
 int     main(void)
@@ -156,7 +188,7 @@ int     main(void)
 	free (gnl);
         return (0);
 }
-
+*/
 /*
 int	main(teste get_str)
 {
