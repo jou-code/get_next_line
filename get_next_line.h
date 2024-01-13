@@ -6,7 +6,7 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:42:46 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/12 15:47:58 by jou              ###   ########.fr       */
+/*   Updated: 2024/01/13 17:37:17 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,15 @@
 #  define MAX_FD 1024
 # endif
 
-#include <unistd.h>
-#include <stdlib.h>
+# include <unistd.h>
+# include <stdlib.h>
 
+int		is_line(char *next_line);
+int		ft_strlen(char *str);
 char	*ft_strjoin(char *s1, char *s2);
-int	ft_strlen(char *str);
 char	*get_rest(char *next_line);
 char	*get_line(char *next_line);
 char	*get_next_line(int fd);
-int	is_line(char *next_line);
-
-
+void	*ft_calloc(size_t nmemb, size_t size);
 
 #endif
