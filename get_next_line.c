@@ -6,42 +6,13 @@
 /*   By: jou <jgils@student.42.rio>                 +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/05 17:50:36 by jou               #+#    #+#             */
-/*   Updated: 2024/01/13 17:28:14 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/13 17:28:43 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char *s1, char *s2)
-{
-	int		i;
-	char	*join;
-
-	join = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1 * sizeof(char));
-	if (!join)
-		return (NULL);
-	i = 0;
-	if (s1)
-	{
-		while (s1 && s1[i])
-		{
-			join[i] = s1[i];
-			i++;
-		}
-		free (s1);
-	}
-	while (s2 && *s2)
-		join[i++] = *s2++;
-	join[i] = '\0';
-	if (!join[0])
-	{
-		free(join);
-		return (NULL);
-	}
-	return (join);
-}
-
-char	*get_rest(char *next_line)
+static char	*get_rest(char *next_line)
 {
 	int		i;
 	int		i2;
@@ -70,7 +41,7 @@ char	*get_rest(char *next_line)
 	return (rest);
 }
 
-char	*get_line(char *next_line)
+static char	*get_line(char *next_line)
 {
 	int		i;
 	int		i2;
@@ -99,7 +70,7 @@ char	*get_line(char *next_line)
 	return (line);
 }
 
-char	*make_lines(int fd, char *buf)
+static char	*make_lines(int fd, char *buf)
 {
 	static char	*next_line = 0;
 	char		*line;

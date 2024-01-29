@@ -6,13 +6,13 @@
 /*   By: jgils <jgils@student.42.rio>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/06 17:48:45 by jgils             #+#    #+#             */
-/*   Updated: 2024/01/13 17:18:07 by jgils            ###   ########.fr       */
+/*   Updated: 2024/01/13 17:40:31 by jgils            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *str)
+static int	ft_strlen(char *str)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+static void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*calloc;
 	size_t	i;
@@ -44,7 +44,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (calloc);
 }
 
-int	is_line(char *next_line)
+static int	is_line(char *next_line)
 {
 	int		i;
 
@@ -58,4 +58,33 @@ int	is_line(char *next_line)
 		i++;
 	}
 	return (0);
+}
+
+static char	*ft_strjoin(char *s1, char *s2)
+{
+	int		i;
+	char	*join;
+
+	join = (char *) malloc(ft_strlen(s1) + ft_strlen(s2) + 1 * sizeof(char));
+	if (!join)
+		return (NULL);
+	i = 0;
+	if (s1)
+	{
+		while (s1 && s1[i])
+		{
+			join[i] = s1[i];
+			i++;
+		}
+		free (s1);
+	}
+	while (s2 && *s2)
+		join[i++] = *s2++;
+	join[i] = '\0';
+	if (!join[0])
+	{
+		free(join);
+		return (NULL);
+	}
+	return (join);
 }
